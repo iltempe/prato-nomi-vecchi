@@ -85,7 +85,7 @@ footer button{font:inherit;font-size:12px;padding:5px 9px;border:1px solid var(-
     <header>
       <h1>Prato coi <em>nomi vecchi</em></h1>
       <button id="toggle" type="button">Lista</button>
-      <p class="sub">I nomi che i pratesi usano (o usavano) e che sullo stradario non ci sono: le 370 schede delle Mappe dei Cittadini, porte e luoghi della città medievale, vecchi nomi già taggati in OpenStreetMap.</p>
+      <p class="sub">I nomi che i pratesi usano (o usavano) e che sullo stradario non ci sono: le 370 schede delle Mappe dei Cittadini, porte e palazzi del centro storico, vecchi nomi di vie, nomi antichi già registrati in OpenStreetMap.</p>
     </header>
     <div class="tools">
       <input id="q" type="search" placeholder="Cerca un nome, una frazione, una via…" autocomplete="off">
@@ -115,8 +115,9 @@ footer button{font:inherit;font-size:12px;padding:5px 9px;border:1px solid var(-
       <li><b>Toponimi popolari</b>, <b>leggende</b>, <b>case e ville</b>, <b>acque e mulini</b>, <b>tabernacoli</b>, <b>fabbriche</b>, <b>memorie</b>: le schede <i>Mappe dei Cittadini</i> della Provincia, raccolte da testimonianze orali.</li>
       <li><b>Dalle testimonianze</b>: microtoponimi citati dentro le interviste (es. via della Goraccia, il Regnaino).</li>
       <li><b>Finiti in una via</b>: toponimi popolari poi passati al nome di una strada.</li>
-      <li><b>Città medievale</b>: porte e luoghi spariti, ricollocati sulle vie attuali.</li>
-      <li><b>Già in OSM</b>: elementi che hanno già <code>old_name</code>/<code>loc_name</code>.</li>
+      <li><b>Centro storico</b>: porte e luoghi della città medievale, palazzi col nome antico.</li>
+      <li><b>Vecchi nomi di vie</b>: strade che si chiamavano in un altro modo (via delle Oche, via della Madonna, via del Prezzemolo…).</li>
+      <li>Le voci che in OpenStreetMap hanno già <code>old_name</code>/<code>loc_name</code> sono distribuite negli strati per tema; la scheda indica la fonte OSM.</li>
     </ul>
     <h2 style="margin-top:18px">Fonti</h2>
     <ul>
@@ -145,9 +146,9 @@ const CATS = {
   sacro:{lab:'Tabernacoli e chiese', hex:'#a0522d'},
   lavoro:{lab:'Fabbriche e fornaci', hex:'#5f5f5f'},
   memoria:{lab:'Memorie e guerra', hex:'#8b1e3f'},
-  storico:{lab:'Città medievale', hex:'#b8860b'},
-  ufficializzato:{lab:'Finiti in una via', hex:'#8a8172'},
-  osm:{lab:'Già in OSM', hex:'#264653'}
+  storico:{lab:'Centro storico', hex:'#b8860b'},
+  vie:{lab:'Vecchi nomi di vie', hex:'#2c7a7b'},
+  ufficializzato:{lab:'Finiti in una via', hex:'#8a8172'}
 };
 const PREC = {P:'punto', V:'via', Z:'zona', N:'non localizzato'};
 const on = Object.fromEntries(Object.keys(CATS).map(k=>[k,true]));
@@ -212,7 +213,7 @@ function makeMarkers(){
   FEATS.forEach(f => {
     if (!f.geometry) return;
     const p = f.properties, [lo,la] = f.geometry.coordinates, c = CATS[p.cat];
-    const r = p.prec==='Z' ? 8 : (p.cat==='popolare'||p.cat==='testimonianze'||p.cat==='storico' ? 6.5 : 5);
+    const r = p.prec==='Z' ? 8 : (p.cat==='popolare'||p.cat==='testimonianze'||p.cat==='vie'||p.cat==='storico' ? 6.5 : 5);
     const m = L.circleMarker([la,lo], {renderer:R, radius:r, color:'#fffaf1', weight:2, fillColor:c.hex, fillOpacity: p.prec==='Z'?.55:.95, dashArray: p.prec==='Z'?'3 3':null});
     m.bindPopup(popupHtml(p), {maxWidth:300, autoPanPadding:[30,30]});
     m.on('click', () => select(p.id, false));
@@ -225,7 +226,7 @@ function visible(p, q){
   if (!q) return true;
   return norm([p.nome,p.zona,p.dove,p.testo].join(' ')).includes(q);
 }
-const PRIO = {popolare:0, testimonianze:0, storico:1, leggenda:1, ufficializzato:2, osm:2, case:3, acqua:3, sacro:3, lavoro:3, memoria:3};
+const PRIO = {popolare:0, testimonianze:0, vie:0, storico:1, leggenda:1, ufficializzato:2, case:3, acqua:3, sacro:3, lavoro:3, memoria:3};
 function refreshPins(){
   pinLabels.clearLayers();
   if (map.getZoom() < 15) return;

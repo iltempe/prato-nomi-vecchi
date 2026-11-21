@@ -4,7 +4,7 @@ Mappa di Prato con i nomi che i pratesi usano (o usavano) e che non sono nella t
 
 **Mappa:** https://iltempe.github.io/prato-nomi-vecchi/
 
-421 punti: le 370 schede del comune di Prato delle *Mappe dei Cittadini*, 6 microtoponimi citati nelle testimonianze, 16 luoghi della città medievale, 29 elementi OpenStreetMap che hanno già `old_name`/`loc_name`.
+421 punti, classificati per tema: le 370 schede del comune di Prato delle *Mappe dei Cittadini*, 6 microtoponimi citati nelle testimonianze, 16 luoghi della città medievale, 29 nomi antichi già registrati in OpenStreetMap (`old_name`/`loc_name`).
 
 ## Dataset
 
@@ -18,10 +18,10 @@ Mappa di Prato con i nomi che i pratesi usano (o usavano) e che non sono nella t
 
 | Campo | Significato |
 |---|---|
-| `id` | `mcNNN` = scheda NNN delle Mappe dei Cittadini · `tmN` = microtoponimo dalle testimonianze · `hN` = città medievale · `osm…` = elemento OSM |
+| `id` | `mcNNN` = scheda NNN delle Mappe dei Cittadini · `tmN` = microtoponimo dalle testimonianze · `hN` = città medievale · `osm…` = elemento OSM con `old_name`/`loc_name` |
 | `nome` | Il nome vecchio o popolare |
-| `cat` | `popolare`, `testimonianze`, `leggenda`, `case`, `acqua`, `sacro`, `lavoro`, `memoria`, `storico`, `ufficializzato` (toponimo popolare poi diventato nome di via), `osm` |
-| `tipo` | Tipologia della scheda (Toponimo, Colonica, Mulino, Tabernacolo…) |
+| `cat` | Tema: `popolare` (toponimi popolari), `testimonianze` (microtoponimi dalle interviste), `vie` (vecchi nomi di vie), `leggenda`, `case` (case e ville), `acqua` (acque e mulini), `sacro` (tabernacoli e chiese), `lavoro` (fabbriche e fornaci), `memoria` (memorie e guerra), `storico` (centro storico), `ufficializzato` (toponimo popolare poi diventato nome di via) |
+| `tipo` | Tipologia della scheda (Toponimo, Colonica, Mulino, Tabernacolo…) o, per le voci OSM, `Vecchio nome (OpenStreetMap)` / `Nome locale (OpenStreetMap)` |
 | `zona`, `dove` | Località e ubicazione come indicate nella fonte |
 | `stato` | `esistente` / `nonesistente` (dalla scheda) |
 | `prec` | Precisione della posizione: `P` punto (coordinate originali della scheda o luogo preciso), `V` lungo la via indicata, `Z` centro della frazione |

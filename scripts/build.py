@@ -218,6 +218,26 @@ for k, fs in grpc.items():
         f['geometry']['coordinates'] = [round(lo + r*math.cos(a)/0.72, 6), round(la + r*math.sin(a), 6)]
 for f in feats:
     n = f['properties']['nome']; f['properties']['nome'] = n[:1].upper() + n[1:]
+# riclassificazione tematica delle voci OSM (e di alcune storiche)
+OSMCAT = {
+ 'w8024608':'popolare',
+ 'w26578187':'vie','w31968912':'vie','w32555763':'vie','w32763709':'vie',
+ 'w282393407':'memoria','w996107453':'memoria',
+ 'w315505951':'case','w325088199':'case','w691296300':'case','w693893909':'case','w995868456':'case','w1004045103':'case','r12953111':'case',
+ 'w1008208832':'acqua','w1233821538':'acqua','w1531931926':'acqua',
+ 'w316236067':'storico','w700927600':'storico','w701080873':'storico','w704641869':'storico','w1132427481':'storico','r9748677':'storico','r14031781':'storico',
+ 'r5876529':'sacro','r9741504':'sacro',
+ 'r9754477':'lavoro','r13504226':'lavoro','r13530039':'lavoro'}
+for f in feats:
+    p = f['properties']
+    if p['cat'] == 'osm':
+        k = p['id'][3:]
+        if k not in OSMCAT: raise SystemExit('voce OSM non classificata: ' + p['id'])
+        p['cat'] = OSMCAT[k]
+        p['tipo'] = ('Vecchio nome' if p['tipo'] == 'vecchio nome' else 'Nome locale') + ' (OpenStreetMap)'
+        if p['cat'] == 'storico': p['zona'] = 'Centro storico'
+    if p['id'] in ('h2', 'tm0'): p['cat'] = 'vie'
+    if p['id'] == 'h16': p['cat'] = 'popolare'
 import os
 os.makedirs(OUT, exist_ok=True)
 json.dump(base, open(OUT+'base.json', 'w'), separators=(',', ':'), ensure_ascii=False)
